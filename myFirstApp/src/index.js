@@ -28,7 +28,7 @@ app.get("/schedules", (req, res) => {
 });
 
 app.get("/users/:id", (req, res) => {
-  const idNumber = req.params.id; 
+  const idNumber = req.params.id; //look params
   if (idNumber >= myData.users.length){
     res.json("No such a user");
     return;}
