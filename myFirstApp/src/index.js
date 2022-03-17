@@ -35,8 +35,6 @@ app.get("/users/:id", (req, res) => {
   res.json(myData.users[idNumber]);
 });
 
-
-
 //const myData = require("./data");
 
 // 4.ustawienie nasluchiwania
