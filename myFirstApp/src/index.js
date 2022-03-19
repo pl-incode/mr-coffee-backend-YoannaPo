@@ -23,19 +23,29 @@ app.engine('mustache', mustacheExpress());
 
 
 // 3.zdefiniowanie handlera 
-app.get("/", (req, res) => {
+app.get("/", (req, res, next) => {
   res.render("Welcome", {"Welcome": "Welcome to our awesome website"});
 }); //console.log(req);
 
-app.get("/users", (req, res) => {
-  res.json(myData.users); //zwraca liste uzytkowników
+app.get("/users", (req, res, next) => {
+  //odwolujemy się do bazy myData zdefiniowanej wiersz 8
+  const usersNumber = [...myData.users];
+    for (let i=0; i<usersNumber.length; i++) {
+      usersNumber[i].id = i;
+    }
+    res.render("users", {
+      "Title": "List of users",
+      "user": usersNumber,
+    });
+  //res.json(myData.users); //zwraca liste uzytkowników
 });
 
-app.get("/schedules", (req, res) => {
+app.get("/schedules", (req, res, next) => {
+
   res.send(myData.schedules); //zwraca liste terminow
 });
 
-app.get("/users/:id", (req, res) => {
+app.get("/users/:id", (req, res, next) => {
   const idNumber = req.params.id; //look params
   if (idNumber >= myData.users.length){
     res.json("No such a user");
