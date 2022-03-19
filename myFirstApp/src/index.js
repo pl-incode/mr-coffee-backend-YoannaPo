@@ -7,16 +7,24 @@ const bodyParser = require("body-parser");
 
 const myData = require("./data");
 
-
-
 // 2.inicjalizacja
 const app = express();
 //Expressie uzywaj bodyParser
 app.use(bodyParser.json());
 
+const mustacheExpress = require('mustache-express');
+app.set('views', `${__dirname}/../views`);
+
+//teraz express wie, ze chcemy uzywac mustache jako nasz view engine:
+app.set('view engine', 'mustache');
+app.engine('mustache', mustacheExpress());
+
+
+
+
 // 3.zdefiniowanie handlera 
 app.get("/", (req, res) => {
-  res.send("Welcome to our schedule website");
+  res.render("Welcome", {"Welcome": "Welcome to our awesome website"});
 }); //console.log(req);
 
 app.get("/users", (req, res) => {
