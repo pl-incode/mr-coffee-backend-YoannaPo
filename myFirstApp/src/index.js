@@ -42,7 +42,11 @@ app.get("/users", (req, res, next) => {
 
 app.get("/schedules", (req, res, next) => {
 
-  res.send(myData.schedules); //zwraca liste terminow
+  res.render("schedules", {
+    "Title" : "All schedules - list",
+    "schedule": myData.schedules,
+  });
+  //send(myData.schedules); //zwraca liste terminow
 });
 
 app.get("/users/:id", (req, res, next) => {
