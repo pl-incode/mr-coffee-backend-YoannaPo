@@ -12,6 +12,9 @@ const app = express();
 //Expressie uzywaj bodyParser
 app.use(bodyParser.json());
 
+app.use(bodyParser.urlencoded({extended: false})); 
+const sha256 = require('js-sha256');
+
 const mustacheExpress = require('mustache-express');
 app.set('views', `${__dirname}/../views`);
 
@@ -37,25 +40,70 @@ app.get("/users", (req, res, next) => {
       "Title": "List of users",
       "user": usersNumber,
     });
-  //res.json(myData.users); //zwraca liste uzytkowników
+  //res.render.("users"); //zwraca liste uzytkowników
 });
 
 app.get("/schedules", (req, res, next) => {
-
   res.render("schedules", {
     "Title" : "All schedules - list",
     "schedule": myData.schedules,
   });
-  //send(myData.schedules); //zwraca liste terminow
+  //res.render("schedules"); //zwraca liste terminow
 });
 
 app.get("/users/:id", (req, res, next) => {
   const idNumber = req.params.id; //look params
-  if (idNumber >= myData.users.length){
-    res.json("No such a user");
-    return;}
-  res.json(myData.users[idNumber]);
+  idNumber >= myData.users.length ? res.render('user', {"Title":"No such user"}) : res.render("user", {"Title": `User ${idNumber}`, 'user': myData.users[idNumber]});
 });
+
+app.get("/users/:id/schedules", (req, res, next) => {
+  const idNumber = req.params.id;
+  if (idNumber >= myData.users.length){
+    res.render('schedules', {"Title": "No such user"});
+    return;}
+  const arr=[];
+  for ( let i = 0; i < myData.schedules.length; i ++){
+    if (idNumber==myData.schedules[i].user_id){
+      arr.push(myData.schedules[i]);
+    }
+  }
+  if (arr.length<1) {
+    res.render('schedules', {"Title": "Make an appointment"});
+    return;
+  }
+  res.render('schedules', {"Title": `User ${idNumber} schedule`, 'schedule': arr });
+});
+
+app.post('/users', (req, res) => {
+  const newUser = req.body;
+  const b = {
+    "firstname": newUser.firstname,
+    "lastname": newUser.lastname,
+    "email": newUser.email,
+    "password": sha256(newUser.password)
+  }
+  myData.users.push(b);
+  res.json(b);
+})
+
+app.post('/schedules', (req, res) => {
+  const newSchedule = req.body;
+  const b = {
+    "user_id": parseInt(newSchedule.user_id),
+    "day": parseInt(newSchedule.day),
+    "start_at": newSchedule.start_at,
+    "end_at": newSchedule.end_at
+  }
+  myData.schedules.push(b);
+  res.json(b);
+  res.redirect('/schedules/$(schedules/lenght-1}')
+})
+
+
+  //   res.json("No such a user");
+  //   return;}
+  // res.json(myData.users[idNumber]);
+
 
 //const myData = require("./data");
 
