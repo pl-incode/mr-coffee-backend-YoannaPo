@@ -59,7 +59,7 @@ app.get('/users/new', (req, res, next) => {
   res.render('newUser', {});
 });
 
-//koniec dodanego
+//xxxx
 
 app.get("/schedules", (req, res, next) => {
   res.render("schedules", {
