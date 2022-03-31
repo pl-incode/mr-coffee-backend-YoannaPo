@@ -9,11 +9,14 @@ const myData = require("./data");
 
 // 2.inicjalizacja
 const app = express();
+
+const sha256 = require('js-sha256');
+
 //Expressie uzywaj bodyParser
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({extended: false})); 
-const sha256 = require('js-sha256');
+
 
 const mustacheExpress = require('mustache-express');
 app.set('views', `${__dirname}/../views`);
@@ -21,6 +24,8 @@ app.set('views', `${__dirname}/../views`);
 //teraz express wie, ze chcemy uzywac mustache jako nasz view engine:
 app.set('view engine', 'mustache');
 app.engine('mustache', mustacheExpress());
+
+//stworzyc const Pool 
 
 
 
@@ -42,6 +47,19 @@ app.get("/users", (req, res, next) => {
     });
   //res.render.("users"); //zwraca liste uzytkowników
 });
+
+//dodany post
+app.post('/users', (req, res) => {
+  res.json(req.body)
+  myData.users.push(req.body)
+  res.redirect('/users/$(users/lenght-1)}')
+})
+
+app.get('/users/new', (req, res, next) => {
+  res.render('newUser', {});
+});
+
+//koniec dodanego
 
 app.get("/schedules", (req, res, next) => {
   res.render("schedules", {
