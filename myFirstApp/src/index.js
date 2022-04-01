@@ -27,6 +27,14 @@ app.engine('mustache', mustacheExpress());
 
 //stworzyc const Pool 
 
+const pool = new pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'graphics', 
+  password: '',
+  port: 5432,
+})
+
 
 
 
@@ -49,7 +57,7 @@ app.get("/users", (req, res, next) => {
 });
 
 //dodany post
-app.post('/users', (req, res) => {
+app.post("/users", (req, res) => {
   res.json(req.body)
   myData.users.push(req.body)
   res.redirect('/users/$(users/lenght-1)}')
@@ -68,6 +76,12 @@ app.get("/schedules", (req, res, next) => {
   });
   //res.render("schedules"); //zwraca liste terminow
 });
+
+//dodany post
+app.post("/schedules", (req, res) => {
+  res.json(req.body)
+  myData.schedules.push(req.body)
+  })
 
 app.get("/users/:id", (req, res, next) => {
   const idNumber = req.params.id; //look params
@@ -104,23 +118,29 @@ app.post('/users', (req, res) => {
   res.json(b);
 })
 
-app.post('/schedules', (req, res) => {
-  const newSchedule = req.body;
-  const b = {
-    "user_id": parseInt(newSchedule.user_id),
-    "day": parseInt(newSchedule.day),
-    "start_at": newSchedule.start_at,
-    "end_at": newSchedule.end_at
-  }
-  myData.schedules.push(b);
-  res.json(b);
-  res.redirect('/schedules/$(schedules/lenght-1}')
-})
+// app.post('/schedules', (req, res) => {
+//   const newSchedule = req.body;
+//   const b = {
+//     "user_id": parseInt(newSchedule.user_id),
+//     "day": parseInt(newSchedule.day),
+//     "start_at": newSchedule.start_at,
+//     "end_at": newSchedule.end_at
+//   }
+//   myData.schedules.push(b);
+//   res.json(b);
+//   res.redirect('/schedules/$(schedules/lenght-1}')
+// })
 
 
-  //   res.json("No such a user");
-  //   return;}
-  // res.json(myData.users[idNumber]);
+//   //   res.json("No such a user");
+//   //   return;}
+//   // res.json(myData.users[idNumber]);
+
+
+app.get("/schedules/new", (req, res, next) => {
+  res.render('newSchedule', {});
+});
+
 
 
 //const myData = require("./data");
